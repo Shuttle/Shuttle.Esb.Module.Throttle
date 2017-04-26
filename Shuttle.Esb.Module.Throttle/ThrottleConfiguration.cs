@@ -1,13 +1,29 @@
-﻿namespace Shuttle.Esb.Module.Throttle
-{
-	public class ThrottleConfiguration : IThrottleConfiguration
-	{
-		public string ActiveFromTime { get; set; }
-		public string ActiveToTime { get; set; }
+﻿using System;
 
-		public Throttle CreateThrottle()
-		{
-			return new Throttle(ActiveFromTime, ActiveToTime);
-		}
-	}
+namespace Shuttle.Esb.Module.Throttle
+{
+    public class ThrottleConfiguration : IThrottleConfiguration
+    {
+        private TimeSpan[] _durationToSleepOnAbort;
+        private readonly TimeSpan[] _defaultDurationToSleepOnAbort;
+
+        public ThrottleConfiguration()
+        {
+            CpuUsagePercentage = 65;
+            AbortCycleCount = 5;
+            _defaultDurationToSleepOnAbort = DurationToSleepOnAbort = new[] {TimeSpan.FromSeconds(1)};
+            PerformanceCounterReadInterval = 1000;
+        }
+
+        public int CpuUsagePercentage { get; set; }
+        public int AbortCycleCount { get; set; }
+
+        public TimeSpan[] DurationToSleepOnAbort
+        {
+            get { return _durationToSleepOnAbort ?? _defaultDurationToSleepOnAbort; }
+            set { _durationToSleepOnAbort = value; }
+        }
+
+        public int PerformanceCounterReadInterval { get; set; }
+    }
 }

@@ -72,7 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CpuThrottlePolicy.cs" />
+    <Compile Include="PerformanceCounterValue.cs" />
+    <Compile Include="ThrottlePolicy.cs" />
     <Compile Include="IThrottleConfiguration.cs" />
     <Compile Include="IThrottlePolicy.cs" />
     <Compile Include="ThrottleConfiguration.cs" />

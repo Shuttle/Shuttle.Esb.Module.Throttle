@@ -5,18 +5,17 @@ namespace Shuttle.Esb.Module.Throttle
 {
     public class ThrottleModule : IDisposable, IThreadState
     {
-	    private readonly Throttle _Throttle;
+        private readonly ThrottleObserver _throttleObserver;
         private readonly string _startupPipelineName = typeof (StartupPipeline).FullName;
         private volatile bool _active;
 
-        public ThrottleModule(IPipelineFactory pipelineFactory, IThrottleConfiguration ThrottleConfiguration )
+        public ThrottleModule(IPipelineFactory pipelineFactory, ThrottleObserver throttleObserver)
         {
-	        Guard.AgainstNull(pipelineFactory, "pipelineFactory");
-	        Guard.AgainstNull(ThrottleConfiguration, "ThrottleConfiguration");
+            Guard.AgainstNull(pipelineFactory, "pipelineFactory");
+            Guard.AgainstNull(throttleObserver, "throttleObserver");
 
-			_Throttle = ThrottleConfiguration.CreateThrottle();
-
-			pipelineFactory.PipelineCreated += PipelineCreated;
+            _throttleObserver = throttleObserver;
+            pipelineFactory.PipelineCreated += PipelineCreated;
         }
 
         public void Dispose()
@@ -36,7 +35,7 @@ namespace Shuttle.Esb.Module.Throttle
                 return;
             }
 
-            e.Pipeline.RegisterObserver(new ThrottleObserver(this, _Throttle));
+            e.Pipeline.RegisterObserver(_throttleObserver);
         }
     }
 }

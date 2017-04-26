@@ -19,6 +19,7 @@ namespace Shuttle.Esb.Module.Throttle
 			}
 
 			registry.AttemptRegister(ThrottleSection.Configuration());
+			registry.AttemptRegister<IThrottlePolicy, ThrottlePolicy>();
 			registry.AttemptRegister<ThrottleModule>();
 			registry.AttemptRegister<ThrottleObserver>();
 

@@ -1,8 +1,8 @@
 # Shuttle.Esb.Module.Throttle
 
-The Throttle module for Shuttle.Esb aborts pipeline processing when the current date is not within a given time range.
+The Throttle module for Shuttle.Esb aborts pipeline processing when the CPU usage exceeds given percentage.
 
-The module will attach the `ThrottleObserver` to the `OnPipelineStarting` event of all pipelines except the `StartupPipeline` and abort the pipeline if the current time is not within the active time range.
+The module will attach the `ThrottleObserver` to the `OnPipelineStarting` event of all pipelines except the `StartupPipeline` and abort the pipeline if the SPU usage is exceeds the given percentage.
 
 ```xml
 <configuration>

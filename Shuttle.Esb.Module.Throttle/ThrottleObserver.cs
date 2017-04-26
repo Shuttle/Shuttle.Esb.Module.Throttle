@@ -1,33 +1,48 @@
-﻿using Shuttle.Core.Infrastructure;
+﻿using System;
+using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.Esb.Module.Throttle
 {
-	internal class ThrottleObserver : IPipelineObserver<OnPipelineStarting>
-	{
-		private readonly IThreadState _state;
+    public class ThrottleObserver : IPipelineObserver<OnPipelineStarting>
+    {
+        private readonly IThrottlePolicy _policy;
+        private readonly IThreadState _state;
+        private readonly IThrottleConfiguration _configuration;
+        private int _abortCount;
 
-		private readonly IThrottlePolicy _configuration;
+        public ThrottleObserver(IThreadState state, IThrottleConfiguration configuration, IThrottlePolicy policy)
+        {
+            Guard.AgainstNull(state, "state");
+            Guard.AgainstNull(configuration, "configuration");
+            Guard.AgainstNull(policy, "policy");
 
-		public ThrottleObserver(IThreadState state, IThrottlePolicy configuration)
-		{
-			Guard.AgainstNull(state, "state");
+            _state = state;
+            _configuration = configuration;
+            _policy = policy;
+        }
 
-			_state = state;
-			_configuration = configuration;
-		}
+        public void Execute(OnPipelineStarting pipelineEvent)
+        {
+            if (!_policy.ShouldAbort())
+            {
+                _abortCount = 0;
+                return;
+            }
 
-		public void Execute(OnPipelineStarting pipelineEvent)
-		{
-			const int SLEEP = 15000;
+            pipelineEvent.Pipeline.Abort();
+            int sleep = 1000;
 
-			if (_configuration.Active())
-			{
-				return;
-			}
+            try
+            {
+                sleep = _configuration.DurationToSleepOnAbort[_abortCount].Milliseconds;
+            }
+            catch
+            {
+            }
 
-			pipelineEvent.Pipeline.Abort();
+            ThreadSleep.While(sleep, _state);
 
-			ThreadSleep.While(SLEEP, _state);
-		}
-	}
+            _abortCount += _abortCount + 1 < _configuration.DurationToSleepOnAbort.Length ? 1 : 0;
+        }
+    }
 }
