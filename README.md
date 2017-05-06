@@ -7,10 +7,14 @@ The module will attach the `ThrottleObserver` to the `OnPipelineStarting` event 
 ```xml
 <configuration>
 	<configSections>
-		<section name="Throttle" type="Shuttle.Esb.Module.Throttle.ThrottleSection, Shuttle.Esb.Module.Throttle"/>
+		<section name="throttle" type="Shuttle.Esb.Module.Throttle.ThrottleSection, Shuttle.Esb.Module.Throttle"/>
 	</configSections>
 
-  <Throttle from="8:00" to="23:00" />
+  <throttle 
+	cpuUsagePercentage="65"
+	abortCycleCount="5"
+	performanceCounterReadInterval="1000"
+	durationToSleepOnAbort="1s" />
 </configuration>
 ```
 
