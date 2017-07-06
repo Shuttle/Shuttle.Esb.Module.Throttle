@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Shuttle.Core.Infrastructure;
 
 namespace Shuttle.Esb.Module.Throttle
@@ -10,6 +9,7 @@ namespace Shuttle.Esb.Module.Throttle
         private readonly IThrottlePolicy _policy;
         private readonly string _startupPipelineName = typeof(StartupPipeline).FullName;
         private readonly string _transportMessagePipeline = typeof(TransportMessagePipeline).FullName;
+        private readonly string _shutdownPipelineName = typeof(ShutdownPipeline).FullName;
         private volatile bool _active;
 
         public ThrottleModule(IPipelineFactory pipelineFactory, IThrottleConfiguration configuration, IThrottlePolicy policy)
@@ -36,11 +36,13 @@ namespace Shuttle.Esb.Module.Throttle
 
         private void PipelineCreated(object sender, PipelineEventArgs e)
         {
-            var pipelineFullName = e.Pipeline.GetType().FullName;
+            var pipelineName = e.Pipeline.GetType().FullName;
 
-            if (pipelineFullName.Equals(_startupPipelineName, StringComparison.InvariantCultureIgnoreCase)
+            if (pipelineName.Equals(_startupPipelineName, StringComparison.InvariantCultureIgnoreCase)
                 ||
-                pipelineFullName.Equals(_transportMessagePipeline, StringComparison.InvariantCultureIgnoreCase))
+                pipelineName.Equals(_transportMessagePipeline, StringComparison.InvariantCultureIgnoreCase)
+                ||
+                pipelineName.Equals(_shutdownPipelineName, StringComparison.InvariantCultureIgnoreCase))
             {
                 return;
             }
