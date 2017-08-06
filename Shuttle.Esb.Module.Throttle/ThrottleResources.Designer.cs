@@ -61,6 +61,15 @@ namespace Shuttle.Esb.Module.Throttle {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No &apos;throttle&apos; configuration section was found.  The default configuration has been applied..
+        /// </summary>
+        public static string DefaultConfigurationApplied {
+            get {
+                return ResourceManager.GetString("DefaultConfigurationApplied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ActiveFromTime &apos;{0}&apos; is not a valid time..
         /// </summary>
         public static string InvalidActiveFromTime {

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DefaultConfigurationApplied" xml:space="preserve">
+    <value>No 'throttle' configuration section was found.  The default configuration has been applied.</value>
+  </data>
   <data name="InvalidActiveFromTime" xml:space="preserve">
     <value>ActiveFromTime '{0}' is not a valid time.</value>
     <comment>{0} = invalid time</comment>
