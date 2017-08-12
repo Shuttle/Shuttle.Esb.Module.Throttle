@@ -6,7 +6,6 @@ namespace Shuttle.Esb.Module.Throttle
         IComponentRegistryBootstrap,
         IComponentResolverBootstrap
     {
-        private static bool _registered;
         private static bool _registryBootstrapCalled;
         private static bool _resolverBootstrapCalled;
 
@@ -28,15 +27,13 @@ namespace Shuttle.Esb.Module.Throttle
 
             registry.AttemptRegister<IThrottlePolicy, ThrottlePolicy>();
             registry.AttemptRegister<ThrottleModule>();
-
-            _registered = true;
         }
 
         public void Resolve(IComponentResolver resolver)
         {
             Guard.AgainstNull(resolver, "resolver");
 
-            if (_resolverBootstrapCalled || !_registered)
+            if (_resolverBootstrapCalled)
             {
                 return;
             }
