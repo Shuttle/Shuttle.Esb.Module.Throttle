@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Contract;
 
 namespace Shuttle.Esb.Module.Throttle
 {
@@ -11,7 +11,7 @@ namespace Shuttle.Esb.Module.Throttle
 
         public ThrottlePolicy(IThrottleConfiguration configuration)
         {
-            Guard.AgainstNull(configuration, "configuration");
+            Guard.AgainstNull(configuration, nameof(configuration));
 
             _configuration = configuration;
             _performanceCounterValue = new PerformanceCounterValue(new PerformanceCounter

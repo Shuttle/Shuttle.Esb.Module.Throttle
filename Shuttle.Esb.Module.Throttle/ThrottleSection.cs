@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Configuration;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Configuration;
+using Shuttle.Core.Logging;
+using Shuttle.Core.TimeSpanTypeConverters;
 
 namespace Shuttle.Esb.Module.Throttle
 {
@@ -36,7 +38,7 @@ namespace Shuttle.Esb.Module.Throttle
             }
             else
             {
-                Log.Information(ThrottleResources.DefaultConfigurationApplied);
+                Log.Information(Resources.DefaultConfigurationApplied);
             }
 
             return configuration;

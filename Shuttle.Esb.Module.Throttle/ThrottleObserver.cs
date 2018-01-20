@@ -1,5 +1,7 @@
 ﻿using System;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Contract;
+using Shuttle.Core.Pipelines;
+using Shuttle.Core.Threading;
 
 namespace Shuttle.Esb.Module.Throttle
 {
@@ -12,9 +14,9 @@ namespace Shuttle.Esb.Module.Throttle
 
         public ThrottleObserver(IThreadState state, IThrottleConfiguration configuration, IThrottlePolicy policy)
         {
-            Guard.AgainstNull(state, "state");
-            Guard.AgainstNull(configuration, "configuration");
-            Guard.AgainstNull(policy, "policy");
+            Guard.AgainstNull(state, nameof(state));
+            Guard.AgainstNull(configuration, nameof(configuration));
+            Guard.AgainstNull(policy, nameof(policy));
 
             _state = state;
             _configuration = configuration;

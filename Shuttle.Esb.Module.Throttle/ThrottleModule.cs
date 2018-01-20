@@ -1,5 +1,7 @@
 ﻿using System;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Contract;
+using Shuttle.Core.Pipelines;
+using Shuttle.Core.Threading;
 
 namespace Shuttle.Esb.Module.Throttle
 {
@@ -15,9 +17,9 @@ namespace Shuttle.Esb.Module.Throttle
         public ThrottleModule(IPipelineFactory pipelineFactory, IThrottleConfiguration configuration,
             IThrottlePolicy policy)
         {
-            Guard.AgainstNull(pipelineFactory, "pipelineFactory");
-            Guard.AgainstNull(configuration, "configuration");
-            Guard.AgainstNull(policy, "policy");
+            Guard.AgainstNull(pipelineFactory, nameof(pipelineFactory));
+            Guard.AgainstNull(configuration, nameof(configuration));
+            Guard.AgainstNull(policy, nameof(policy));
 
             pipelineFactory.PipelineCreated += PipelineCreated;
 
@@ -34,7 +36,7 @@ namespace Shuttle.Esb.Module.Throttle
 
         private void PipelineCreated(object sender, PipelineEventArgs e)
         {
-            var pipelineName = e.Pipeline.GetType().FullName;
+            var pipelineName = e.Pipeline.GetType().FullName ?? string.Empty;
 
             if (pipelineName.Equals(_startupPipelineName, StringComparison.InvariantCultureIgnoreCase)
                 ||

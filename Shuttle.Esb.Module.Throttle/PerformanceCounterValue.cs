@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Contract;
 
 namespace Shuttle.Esb.Module.Throttle
 {
@@ -13,7 +13,7 @@ namespace Shuttle.Esb.Module.Throttle
 
         public PerformanceCounterValue(PerformanceCounter counter, int readIntervalMilliseconds)
         {
-            Guard.AgainstNull(counter, "counter");
+            Guard.AgainstNull(counter, nameof(counter));
 
             _counter = counter;
             _readIntervalMilliseconds = readIntervalMilliseconds < 1000 ? 1000 : readIntervalMilliseconds;

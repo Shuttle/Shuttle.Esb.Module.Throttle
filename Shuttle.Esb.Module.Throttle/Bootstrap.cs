@@ -1,4 +1,5 @@
-﻿using Shuttle.Core.Infrastructure;
+﻿using Shuttle.Core.Container;
+using Shuttle.Core.Contract;
 
 namespace Shuttle.Esb.Module.Throttle
 {
@@ -11,7 +12,7 @@ namespace Shuttle.Esb.Module.Throttle
 
         public void Register(IComponentRegistry registry)
         {
-            Guard.AgainstNull(registry, "registry");
+            Guard.AgainstNull(registry, nameof(registry));
 
             if (_registryBootstrapCalled)
             {
@@ -22,7 +23,7 @@ namespace Shuttle.Esb.Module.Throttle
 
             if (!registry.IsRegistered<IThrottleConfiguration>())
             {
-                registry.AttemptRegister(ThrottleSection.Configuration());
+                registry.AttemptRegisterInstance(ThrottleSection.Configuration());
             }
 
             registry.AttemptRegister<IThrottlePolicy, ThrottlePolicy>();
@@ -31,7 +32,7 @@ namespace Shuttle.Esb.Module.Throttle
 
         public void Resolve(IComponentResolver resolver)
         {
-            Guard.AgainstNull(resolver, "resolver");
+            Guard.AgainstNull(resolver, nameof(resolver));
 
             if (_resolverBootstrapCalled)
             {

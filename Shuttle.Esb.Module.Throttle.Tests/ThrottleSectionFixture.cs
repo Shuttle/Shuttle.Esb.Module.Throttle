@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using NUnit.Framework;
-using Shuttle.Core.Infrastructure;
+using Shuttle.Core.Configuration;
 
 namespace Shuttle.Esb.Module.Throttle.Tests
 {

@@ -4,8 +4,8 @@ namespace Shuttle.Esb.Module.Throttle
 {
     public class ThrottleConfiguration : IThrottleConfiguration
     {
-        private TimeSpan[] _durationToSleepOnAbort;
         private readonly TimeSpan[] _defaultDurationToSleepOnAbort;
+        private TimeSpan[] _durationToSleepOnAbort;
 
         public ThrottleConfiguration()
         {
@@ -20,8 +20,8 @@ namespace Shuttle.Esb.Module.Throttle
 
         public TimeSpan[] DurationToSleepOnAbort
         {
-            get { return _durationToSleepOnAbort ?? _defaultDurationToSleepOnAbort; }
-            set { _durationToSleepOnAbort = value; }
+            get => _durationToSleepOnAbort ?? _defaultDurationToSleepOnAbort;
+            set => _durationToSleepOnAbort = value;
         }
 
         public int PerformanceCounterReadInterval { get; set; }

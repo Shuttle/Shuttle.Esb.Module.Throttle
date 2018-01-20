@@ -1,5 +1,7 @@
 # Shuttle.Esb.Module.Throttle
 
+*Note:* currently only available for .Net proper as .Net Core does not support the `PerformanceCounter` class.
+
 The Throttle module for Shuttle.Esb aborts pipeline processing when the CPU usage exceeds given percentage.
 
 The module will attach the `ThrottleObserver` to the `OnPipelineStarting` event of all pipelines except the `StartupPipeline` and abort the pipeline if the SPU usage is exceeds the given percentage.
