@@ -1,11 +1,10 @@
 ﻿using System;
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
-using Shuttle.Core.Threading;
 
 namespace Shuttle.Esb.Module.Throttle
 {
-    public class ThrottleModule : IDisposable, IThreadState
+    public class ThrottleModule : IDisposable
     {
         private readonly IThrottleConfiguration _configuration;
         private readonly IThrottlePolicy _policy;
@@ -32,8 +31,6 @@ namespace Shuttle.Esb.Module.Throttle
             _active = false;
         }
 
-        public bool Active => _active;
-
         private void PipelineCreated(object sender, PipelineEventArgs e)
         {
             var pipelineName = e.Pipeline.GetType().FullName ?? string.Empty;
@@ -47,7 +44,7 @@ namespace Shuttle.Esb.Module.Throttle
                 return;
             }
 
-            e.Pipeline.RegisterObserver(new ThrottleObserver(this, _configuration, _policy));
+            e.Pipeline.RegisterObserver(new ThrottleObserver(e.Pipeline.State.GetCancellationToken(), _configuration, _policy));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
 using Shuttle.Core.Threading;
@@ -8,17 +9,16 @@ namespace Shuttle.Esb.Module.Throttle
     public class ThrottleObserver : IPipelineObserver<OnPipelineStarting>
     {
         private readonly IThrottlePolicy _policy;
-        private readonly IThreadState _state;
+        private readonly CancellationToken _cancellationToken;
         private readonly IThrottleConfiguration _configuration;
         private int _abortCount;
 
-        public ThrottleObserver(IThreadState state, IThrottleConfiguration configuration, IThrottlePolicy policy)
+        public ThrottleObserver(CancellationToken cancellationToken, IThrottleConfiguration configuration, IThrottlePolicy policy)
         {
-            Guard.AgainstNull(state, nameof(state));
             Guard.AgainstNull(configuration, nameof(configuration));
             Guard.AgainstNull(policy, nameof(policy));
 
-            _state = state;
+            _cancellationToken = cancellationToken;
             _configuration = configuration;
             _policy = policy;
         }
@@ -42,7 +42,7 @@ namespace Shuttle.Esb.Module.Throttle
             {
             }
 
-            ThreadSleep.While(sleep, _state);
+            ThreadSleep.While(sleep, _cancellationToken);
 
             _abortCount += _abortCount + 1 < _configuration.DurationToSleepOnAbort.Length ? 1 : 0;
         }
