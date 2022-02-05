@@ -1,7 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net461</TargetFramework>
+	<PropertyGroup>
+		<!-- PerformanceCounter is used which is Windows-only -->
+        <TargetFrameworks>net461</TargetFrameworks>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     </PropertyGroup>
 
@@ -13,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Shuttle.Esb" Version="11.0.0" />
+        <PackageReference Include="Shuttle.Esb" Version="12.0.0" />
     </ItemGroup>
 
     <ItemGroup>
