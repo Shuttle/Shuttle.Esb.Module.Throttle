@@ -33,7 +33,7 @@ The module will attach the `ThrottleObserver` to the `OnPipelineStarting` event 
 | `performanceCounterReadInterval`				| 1000		| The number of milliseconds between reading the CPU usage performance counter.  Minimun of 1000 allowed. |
 | `durationToSleepOnAbort`	| 1s		| The duration(s) to sleep when aborting a pipeline.  Cannot be incremented for each abort. |
 
-# Registration / Activation
+## Registration / Activation
 
 The required components may be registered by calling `ComponentRegistryExtensions.RegisterThrottle(IComponentRegistry)`.
 
