@@ -1,6 +1,12 @@
-# Shuttle.Esb.Module.Throttle
+# Throttle (Windows)
 
-*Note:* currently only available for .Net proper as .Net Core does not support the `PerformanceCounter` class.
+```
+PM> Install-Package Shuttle.Esb.Module.Throttle
+```
+
+::: info
+This package currently makes use of Performance Counters which are only available on Windows.  In due course these will be replace with Event Counters which are cross-platform.  Pull Requests are welcome if you'd like to refactor in the meantime.
+:::
 
 The Throttle module for Shuttle.Esb aborts pipeline processing when the CPU usage exceeds given percentage.
 
