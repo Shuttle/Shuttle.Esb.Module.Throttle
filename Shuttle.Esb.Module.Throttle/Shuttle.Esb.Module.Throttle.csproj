@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<!-- PerformanceCounter is used which is Windows-only -->
@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Shuttle.Esb" Version="12.0.0" />
+        <PackageReference Include="Shuttle.Esb" Version="12.0.1" />
     </ItemGroup>
 
     <ItemGroup>
