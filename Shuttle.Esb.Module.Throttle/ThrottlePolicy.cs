@@ -1,34 +1,33 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using Microsoft.Extensions.Options;
 using Shuttle.Core.Contract;
 
 namespace Shuttle.Esb.Module.Throttle
 {
-    public class ThrottlePolicy : IThrottlePolicy
+    public class ThrottlePolicy : IThrottlePolicy, IDisposable
     {
-        private readonly IThrottleConfiguration _configuration;
-        private readonly PerformanceCounterValue _performanceCounterValue;
+        private readonly ThrottleOptions _throttleOptions;
         private int _abortCount;
+        private readonly CpuUsage _cpuUsage;
 
-        public ThrottlePolicy(IThrottleConfiguration configuration)
+        public ThrottlePolicy(IOptions<ThrottleOptions> throttleOptions)
         {
-            Guard.AgainstNull(configuration, nameof(configuration));
+            Guard.AgainstNull(throttleOptions, nameof(throttleOptions));
+            Guard.AgainstNull(throttleOptions.Value, nameof(throttleOptions.Value));
 
-            _configuration = configuration;
-            _performanceCounterValue = new PerformanceCounterValue(new PerformanceCounter
-            {
-                CategoryName = "Processor",
-                CounterName = "% Processor Time",
-                InstanceName = "_Total"
-            }, configuration.PerformanceCounterReadInterval);
+            _throttleOptions = throttleOptions.Value;
+
+            _cpuUsage = new CpuUsage();
         }
 
         public bool ShouldAbort()
         {
-            if (_performanceCounterValue.NextValue() > _configuration.CpuUsagePercentage)
+            if (_cpuUsage.Percentage > _throttleOptions.CpuUsagePercentage)
             {
                 _abortCount++;
 
-                if (_abortCount > _configuration.AbortCycleCount)
+                if (_abortCount > _throttleOptions.AbortCycleCount)
                 {
                     _abortCount = 0;
                 }
@@ -39,6 +38,11 @@ namespace Shuttle.Esb.Module.Throttle
             _abortCount = 0;
 
             return false;
+        }
+
+        public void Dispose()
+        {
+            _cpuUsage?.Dispose();
         }
     }
 }

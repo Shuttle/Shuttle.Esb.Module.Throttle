@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Shuttle.Core.Contract;
 using Shuttle.Core.Pipelines;
-using Shuttle.Core.Threading;
 
 namespace Shuttle.Esb.Module.Throttle
 {
@@ -10,16 +11,16 @@ namespace Shuttle.Esb.Module.Throttle
     {
         private readonly IThrottlePolicy _policy;
         private readonly CancellationToken _cancellationToken;
-        private readonly IThrottleConfiguration _configuration;
+        private readonly ThrottleOptions _throttleOptions;
         private int _abortCount;
 
-        public ThrottleObserver(CancellationToken cancellationToken, IThrottleConfiguration configuration, IThrottlePolicy policy)
+        public ThrottleObserver(ThrottleOptions throttleOptions, IThrottlePolicy policy, CancellationToken cancellationToken)
         {
-            Guard.AgainstNull(configuration, nameof(configuration));
+            Guard.AgainstNull(throttleOptions, nameof(throttleOptions));
             Guard.AgainstNull(policy, nameof(policy));
 
+            _throttleOptions = throttleOptions;
             _cancellationToken = cancellationToken;
-            _configuration = configuration;
             _policy = policy;
         }
 
@@ -32,19 +33,26 @@ namespace Shuttle.Esb.Module.Throttle
             }
 
             pipelineEvent.Pipeline.Abort();
-            int sleep = 1000;
+            var sleep = TimeSpan.FromSeconds(1);
 
             try
             {
-                sleep = _configuration.DurationToSleepOnAbort[_abortCount].Milliseconds;
+                sleep = _throttleOptions.DurationToSleepOnAbort[_abortCount];
             }
             catch
             {
             }
 
-            ThreadSleep.While(sleep, _cancellationToken);
 
-            _abortCount += _abortCount + 1 < _configuration.DurationToSleepOnAbort.Length ? 1 : 0;
+            try
+            {
+                Task.Delay(sleep, _cancellationToken).Wait(_cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+
+            _abortCount += _abortCount + 1 < _throttleOptions.DurationToSleepOnAbort.Count ? 1 : 0;
         }
     }
 }
