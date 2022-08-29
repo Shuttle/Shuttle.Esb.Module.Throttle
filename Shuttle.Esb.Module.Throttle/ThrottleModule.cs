@@ -8,12 +8,11 @@ namespace Shuttle.Esb.Module.Throttle
     public class ThrottleModule
     {
         private readonly IThrottlePolicy _policy;
-        private readonly string _shutdownPipelineName = typeof(ShutdownPipeline).FullName;
-        private readonly string _startupPipelineName = typeof(StartupPipeline).FullName;
-        private readonly string _transportMessagePipeline = typeof(TransportMessagePipeline).FullName;
+        private readonly Type _inboxMessagePipelineType = typeof(InboxMessagePipeline);
         private readonly ThrottleOptions _throttleOptions;
 
-        public ThrottleModule(IOptions<ThrottleOptions> throttleOptions, IPipelineFactory pipelineFactory, IThrottlePolicy policy)
+        public ThrottleModule(IOptions<ThrottleOptions> throttleOptions, IPipelineFactory pipelineFactory,
+            IThrottlePolicy policy)
         {
             Guard.AgainstNull(throttleOptions, nameof(throttleOptions));
             Guard.AgainstNull(throttleOptions.Value, nameof(throttleOptions.Value));
@@ -28,13 +27,9 @@ namespace Shuttle.Esb.Module.Throttle
 
         private void PipelineCreated(object sender, PipelineEventArgs e)
         {
-            var pipelineName = e.Pipeline.GetType().FullName ?? string.Empty;
+            var pipelineType = e.Pipeline.GetType();
 
-            if (pipelineName.Equals(_startupPipelineName, StringComparison.InvariantCultureIgnoreCase)
-                ||
-                pipelineName.Equals(_transportMessagePipeline, StringComparison.InvariantCultureIgnoreCase)
-                ||
-                pipelineName.Equals(_shutdownPipelineName, StringComparison.InvariantCultureIgnoreCase))
+            if (pipelineType != _inboxMessagePipelineType)
             {
                 return;
             }
