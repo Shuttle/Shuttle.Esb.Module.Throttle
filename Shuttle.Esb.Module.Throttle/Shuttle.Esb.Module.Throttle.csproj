@@ -1,39 +1,33 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<!-- PerformanceCounter is used which is Windows-only -->
-        <TargetFrameworks>net461</TargetFrameworks>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    </PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <None Include=".build\package.msbuild" />
-        <None Include=".build\package.nuspec" />
-        <None Include=".build\Shuttle.MSBuild.dll" />
-        <None Include=".build\Shuttle.MSBuild.targets" />
-    </ItemGroup>
+	<ItemGroup>
+		<None Include=".package\AssemblyInfo.cs.template" />
+		<None Include=".package\package.msbuild" />
+		<None Include=".package\package.nuspec.template" />
+		<None Include=".package\Shuttle.NuGetPackager.MSBuild.dll" />
+		<None Include=".package\Shuttle.NuGetPackager.targets" />
+	</ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Shuttle.Esb" Version="12.0.1" />
-    </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Shuttle.Esb" Version="13.0.0" />
+	</ItemGroup>
 
-    <ItemGroup>
-        <Reference Include="System.Configuration" />
-    </ItemGroup>
+	<ItemGroup>
+		<Compile Update="Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
 
-    <ItemGroup>
-        <Compile Update="Resources.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Resources.resx</DependentUpon>
-        </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Update="Resources.resx">
-            <Generator>PublicResXFileCodeGenerator</Generator>
-            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
-    </ItemGroup>
-
+	<ItemGroup>
+		<EmbeddedResource Update="Resources.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
 </Project>
